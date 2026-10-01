@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crowsi://control/certificate-receipt-signature/v2",
+  "title": "CertificateReceiptSignatureV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "key_id",
+    "key_version",
+    "public_key_spki_sha256",
+    "key_purpose",
+    "algorithm",
+    "digest_sha256",
+    "signature_base64"
+  ],
+  "properties": {
+    "key_id": { "type": "string", "minLength": 8, "maxLength": 256 },
+    "key_version": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "public_key_spki_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "key_purpose": { "type": "string", "minLength": 8, "maxLength": 256 },
+    "algorithm": { "const": "ecdsa-p256-sha256-p1363-low-s" },
+    "digest_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "signature_base64": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{86}==$"
+    }
+  }
+}

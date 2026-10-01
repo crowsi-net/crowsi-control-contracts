@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crowsi://control/isolation-command/v1",
+  "title": "Crowsi Isolation Command v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "command_id",
+    "jti",
+    "enforcement_grant_jti",
+    "decision_id",
+    "pairwise_subject",
+    "actor",
+    "device",
+    "workload",
+    "profile",
+    "proof_key_ref",
+    "revocation_epoch",
+    "binding",
+    "provider",
+    "expected_resource_version",
+    "issued_at",
+    "expires_at",
+    "signed"
+  ],
+  "properties": {
+    "schema": { "const": "crowsi://control/isolation-command/v1" },
+    "command_id": { "$ref": "#/$defs/identifier" },
+    "jti": { "$ref": "#/$defs/identifier" },
+    "enforcement_grant_jti": { "$ref": "#/$defs/identifier" },
+    "decision_id": { "$ref": "#/$defs/identifier" },
+    "pairwise_subject": { "$ref": "#/$defs/opaque" },
+    "actor": { "$ref": "#/$defs/opaque" },
+    "device": { "$ref": "#/$defs/opaque" },
+    "workload": { "$ref": "#/$defs/workload" },
+    "profile": { "$ref": "#/$defs/opaque" },
+    "proof_key_ref": { "$ref": "#/$defs/opaque" },
+    "revocation_epoch": { "type": "integer", "minimum": 0 },
+    "binding": { "$ref": "#/$defs/binding" },
+    "provider": { "$ref": "#/$defs/identifier" },
+    "expected_resource_version": { "$ref": "#/$defs/opaque" },
+    "issued_at": { "$ref": "#/$defs/timestamp" },
+    "expires_at": { "$ref": "#/$defs/timestamp" },
+    "signed": { "$ref": "#/$defs/signed" }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._:-]{0,127}$"
+    },
+    "opaque": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "workload": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "^spiffe://[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*/[A-Za-z0-9_-][A-Za-z0-9._-]{0,63}(?:/[A-Za-z0-9_-][A-Za-z0-9._-]{0,63})*$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["audience", "resource", "action", "purpose", "channel"],
+      "properties": {
+        "audience": { "$ref": "#/$defs/identifier" },
+        "resource": { "$ref": "#/$defs/opaque" },
+        "action": {
+          "enum": ["quarantine", "restrict-egress", "revoke-access", "restore"]
+        },
+        "purpose": { "$ref": "#/$defs/identifier" },
+        "channel": {
+          "enum": ["hatter-interactive", "emergency-console", "service-automation"]
+        }
+      }
+    },
+    "signed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "key_id", "digest", "signature"],
+      "properties": {
+        "algorithm": { "enum": ["ed25519", "ecdsa-p256-sha256"] },
+        "key_id": { "$ref": "#/$defs/identifier" },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43,2048}$"
+        }
+      }
+    }
+  }
+}

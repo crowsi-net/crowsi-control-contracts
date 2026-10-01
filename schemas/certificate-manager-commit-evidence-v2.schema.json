@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crowsi://control/certificate-manager-commit-evidence/v2",
+  "title": "CertificateManagerCommitEvidenceV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "commit_id", "nonce_base64", "issuer", "audience", "action",
+    "authorization_jti", "operation_id", "lease_digest_sha256",
+    "authorization_command_digest_sha256", "target_resource_id",
+    "state_revision", "resource_version", "previous_fence", "current_fence",
+    "previous_lifecycle_revocation_epoch", "lifecycle_revocation_epoch",
+    "disposition", "authority_evidence_id",
+    "authority_evidence_digest_sha256", "security_domain", "deployment_id",
+    "trust_revision", "manager_workload", "commit_key_id",
+    "commit_key_version", "commit_public_key_spki_sha256",
+    "commit_signature_algorithm", "commit_key_purpose", "committed_at_epoch_s",
+    "evidence_issued_at_epoch_s", "expires_at_epoch_s",
+    "submission_recovery_deadline_epoch_s", "signed"
+  ],
+  "properties": {
+    "schema": {
+      "const": "crowsi://control/certificate-manager-commit-evidence/v2"
+    },
+    "commit_id": { "$ref": "#/$defs/id" },
+    "nonce_base64": { "$ref": "#/$defs/nonce" },
+    "issuer": { "$ref": "#/$defs/id" },
+    "audience": { "$ref": "#/$defs/id" },
+    "action": { "$ref": "#/$defs/action" },
+    "authorization_jti": { "$ref": "#/$defs/id" },
+    "operation_id": { "$ref": "#/$defs/id" },
+    "lease_digest_sha256": { "$ref": "#/$defs/digest" },
+    "authorization_command_digest_sha256": { "$ref": "#/$defs/digest" },
+    "target_resource_id": { "$ref": "#/$defs/id" },
+    "state_revision": { "type": "integer", "minimum": 1 },
+    "resource_version": { "type": "integer", "minimum": 0 },
+    "previous_fence": { "type": "integer", "minimum": 0 },
+    "current_fence": { "type": "integer", "minimum": 0 },
+    "previous_lifecycle_revocation_epoch": { "type": "integer", "minimum": 0 },
+    "lifecycle_revocation_epoch": { "type": "integer", "minimum": 0 },
+    "disposition": { "enum": ["completed", "not-executed", "still-unknown"] },
+    "authority_evidence_id": { "$ref": "#/$defs/id" },
+    "authority_evidence_digest_sha256": { "$ref": "#/$defs/digest" },
+    "security_domain": { "$ref": "#/$defs/id" },
+    "deployment_id": { "$ref": "#/$defs/id" },
+    "trust_revision": { "type": "integer", "minimum": 1 },
+    "manager_workload": { "$ref": "#/$defs/id" },
+    "commit_key_id": { "$ref": "#/$defs/id" },
+    "commit_key_version": { "$ref": "#/$defs/version" },
+    "commit_public_key_spki_sha256": { "$ref": "#/$defs/digest" },
+    "commit_signature_algorithm": {
+      "const": "ecdsa-p256-sha256-p1363-low-s"
+    },
+    "commit_key_purpose": {
+      "const": "certificate-manager-commit-receipt"
+    },
+    "committed_at_epoch_s": { "type": "integer", "minimum": 0 },
+    "evidence_issued_at_epoch_s": { "type": "integer", "minimum": 0 },
+    "expires_at_epoch_s": { "type": "integer", "minimum": 1 },
+    "submission_recovery_deadline_epoch_s": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "signed": {
+      "$ref": "certificate-receipt-signature-v2.schema.json"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nonce": {
+      "type": "string",
+      "minLength": 43,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "action": {
+      "enum": [
+        "issue", "renew", "revoke", "certificate-status",
+        "operation-status", "reconcile-unknown"
+      ]
+    }
+  }
+}

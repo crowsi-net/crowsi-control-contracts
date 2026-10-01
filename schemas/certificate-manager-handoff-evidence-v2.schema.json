@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crowsi://control/certificate-manager-handoff-evidence/v2",
+  "title": "CertificateManagerHandoffEvidenceV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "receipt_id", "nonce_base64", "issuer", "audience",
+    "disposition", "action", "authorization_jti", "operation_id",
+    "lease_digest_sha256", "authorization_command_digest_sha256",
+    "security_domain", "deployment_id", "trust_revision",
+    "target_resource_id", "expected_resource_version", "previous_fence",
+    "current_fence", "previous_lifecycle_revocation_epoch",
+    "lifecycle_revocation_epoch", "manager_workload", "receipt_key_id",
+    "receipt_key_version", "receipt_public_key_spki_sha256",
+    "receipt_signature_algorithm", "receipt_key_purpose",
+    "observed_at_epoch_s", "expires_at_epoch_s", "signed"
+  ],
+  "properties": {
+    "schema": {
+      "const": "crowsi://control/certificate-manager-handoff-evidence/v2"
+    },
+    "receipt_id": { "$ref": "#/$defs/id" },
+    "nonce_base64": { "$ref": "#/$defs/nonce" },
+    "issuer": { "$ref": "#/$defs/id" },
+    "audience": { "$ref": "#/$defs/id" },
+    "disposition": { "enum": ["accepted", "not-accepted"] },
+    "action": { "$ref": "#/$defs/action" },
+    "authorization_jti": { "$ref": "#/$defs/id" },
+    "operation_id": { "$ref": "#/$defs/id" },
+    "lease_digest_sha256": { "$ref": "#/$defs/digest" },
+    "authorization_command_digest_sha256": { "$ref": "#/$defs/digest" },
+    "security_domain": { "$ref": "#/$defs/id" },
+    "deployment_id": { "$ref": "#/$defs/id" },
+    "trust_revision": { "type": "integer", "minimum": 1 },
+    "target_resource_id": { "$ref": "#/$defs/id" },
+    "expected_resource_version": { "type": "integer", "minimum": 0 },
+    "previous_fence": { "type": "integer", "minimum": 0 },
+    "current_fence": { "type": "integer", "minimum": 0 },
+    "previous_lifecycle_revocation_epoch": { "type": "integer", "minimum": 0 },
+    "lifecycle_revocation_epoch": { "type": "integer", "minimum": 0 },
+    "manager_workload": { "$ref": "#/$defs/id" },
+    "receipt_key_id": { "$ref": "#/$defs/id" },
+    "receipt_key_version": { "$ref": "#/$defs/version" },
+    "receipt_public_key_spki_sha256": { "$ref": "#/$defs/digest" },
+    "receipt_signature_algorithm": {
+      "const": "ecdsa-p256-sha256-p1363-low-s"
+    },
+    "receipt_key_purpose": {
+      "const": "certificate-manager-handoff-receipt"
+    },
+    "observed_at_epoch_s": { "type": "integer", "minimum": 0 },
+    "expires_at_epoch_s": { "type": "integer", "minimum": 1 },
+    "signed": {
+      "$ref": "certificate-receipt-signature-v2.schema.json"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nonce": {
+      "type": "string",
+      "minLength": 43,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "action": {
+      "enum": [
+        "issue", "renew", "revoke", "certificate-status",
+        "operation-status", "reconcile-unknown"
+      ]
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "crowsi://control/certificate-authority-outcome-evidence/v2",
+  "title": "CertificateAuthorityOutcomeEvidenceV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "evidence_id", "nonce_base64", "issuer", "audience", "action",
+    "authorization_jti", "operation_id", "lease_digest_sha256",
+    "authorization_command_digest_sha256", "target_resource_id",
+    "expected_resource_version", "previous_fence", "current_fence",
+    "previous_lifecycle_revocation_epoch", "lifecycle_revocation_epoch",
+    "disposition", "authority_outcome_digest_sha256",
+    "original_authorization_jti", "original_operation_id",
+    "original_lease_digest_sha256", "original_action",
+    "original_authority_command_digest_sha256",
+    "original_unknown_evidence_digest_sha256", "lifecycle_reservation_id",
+    "original_previous_fence", "original_current_fence",
+    "original_previous_lifecycle_revocation_epoch",
+    "original_lifecycle_revocation_epoch", "security_domain", "deployment_id",
+    "trust_revision", "authority_id", "receipt_key_id", "receipt_key_version",
+    "receipt_public_key_spki_sha256", "receipt_signature_algorithm",
+    "receipt_key_purpose", "issued_at_epoch_s", "expires_at_epoch_s", "signed"
+  ],
+  "properties": {
+    "schema": {
+      "const": "crowsi://control/certificate-authority-outcome-evidence/v2"
+    },
+    "evidence_id": { "$ref": "#/$defs/id" },
+    "nonce_base64": { "$ref": "#/$defs/nonce" },
+    "issuer": { "$ref": "#/$defs/id" },
+    "audience": { "$ref": "#/$defs/id" },
+    "action": { "$ref": "#/$defs/action" },
+    "authorization_jti": { "$ref": "#/$defs/id" },
+    "operation_id": { "$ref": "#/$defs/id" },
+    "lease_digest_sha256": { "$ref": "#/$defs/digest" },
+    "authorization_command_digest_sha256": { "$ref": "#/$defs/digest" },
+    "target_resource_id": { "$ref": "#/$defs/id" },
+    "expected_resource_version": { "type": "integer", "minimum": 0 },
+    "previous_fence": { "type": "integer", "minimum": 0 },
+    "current_fence": { "type": "integer", "minimum": 0 },
+    "previous_lifecycle_revocation_epoch": { "type": "integer", "minimum": 0 },
+    "lifecycle_revocation_epoch": { "type": "integer", "minimum": 0 },
+    "disposition": { "enum": ["completed", "not-executed", "still-unknown"] },
+    "authority_outcome_digest_sha256": {
+      "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+    },
+    "original_authorization_jti": { "$ref": "#/$defs/nullable_id" },
+    "original_operation_id": { "$ref": "#/$defs/nullable_id" },
+    "original_lease_digest_sha256": { "$ref": "#/$defs/nullable_digest" },
+    "original_action": {
+      "oneOf": [
+        { "enum": ["issue", "renew", "revoke"] },
+        { "type": "null" }
+      ]
+    },
+    "original_authority_command_digest_sha256": {
+      "$ref": "#/$defs/nullable_digest"
+    },
+    "original_unknown_evidence_digest_sha256": {
+      "$ref": "#/$defs/nullable_digest"
+    },
+    "lifecycle_reservation_id": { "$ref": "#/$defs/nullable_id" },
+    "original_previous_fence": { "$ref": "#/$defs/nullable_integer" },
+    "original_current_fence": { "$ref": "#/$defs/nullable_integer" },
+    "original_previous_lifecycle_revocation_epoch": {
+      "$ref": "#/$defs/nullable_integer"
+    },
+    "original_lifecycle_revocation_epoch": {
+      "$ref": "#/$defs/nullable_integer"
+    },
+    "security_domain": { "$ref": "#/$defs/id" },
+    "deployment_id": { "$ref": "#/$defs/id" },
+    "trust_revision": { "type": "integer", "minimum": 1 },
+    "authority_id": { "$ref": "#/$defs/id" },
+    "receipt_key_id": { "$ref": "#/$defs/id" },
+    "receipt_key_version": { "$ref": "#/$defs/version" },
+    "receipt_public_key_spki_sha256": { "$ref": "#/$defs/digest" },
+    "receipt_signature_algorithm": {
+      "const": "ecdsa-p256-sha256-p1363-low-s"
+    },
+    "receipt_key_purpose": { "const": "certificate-authority-receipt" },
+    "issued_at_epoch_s": { "type": "integer", "minimum": 0 },
+    "expires_at_epoch_s": { "type": "integer", "minimum": 1 },
+    "signed": {
+      "$ref": "certificate-receipt-signature-v2.schema.json"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "action": { "const": "reconcile-unknown" } },
+        "required": ["action"]
+      },
+      "then": {
+        "properties": {
+          "original_authorization_jti": { "$ref": "#/$defs/id" },
+          "original_operation_id": { "$ref": "#/$defs/id" },
+          "original_lease_digest_sha256": { "$ref": "#/$defs/digest" },
+          "original_action": { "enum": ["issue", "renew", "revoke"] },
+          "original_authority_command_digest_sha256": { "$ref": "#/$defs/digest" },
+          "original_unknown_evidence_digest_sha256": { "$ref": "#/$defs/digest" },
+          "lifecycle_reservation_id": { "$ref": "#/$defs/id" },
+          "original_previous_fence": { "type": "integer", "minimum": 0 },
+          "original_current_fence": { "type": "integer", "minimum": 0 },
+          "original_previous_lifecycle_revocation_epoch": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "original_lifecycle_revocation_epoch": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "original_authorization_jti": { "type": "null" },
+          "original_operation_id": { "type": "null" },
+          "original_lease_digest_sha256": { "type": "null" },
+          "original_action": { "type": "null" },
+          "original_authority_command_digest_sha256": { "type": "null" },
+          "original_unknown_evidence_digest_sha256": { "type": "null" },
+          "lifecycle_reservation_id": { "type": "null" },
+          "original_previous_fence": { "type": "null" },
+          "original_current_fence": { "type": "null" },
+          "original_previous_lifecycle_revocation_epoch": { "type": "null" },
+          "original_lifecycle_revocation_epoch": { "type": "null" },
+          "disposition": { "const": "completed" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "disposition": { "const": "completed" } },
+        "required": ["disposition"]
+      },
+      "then": {
+        "properties": {
+          "authority_outcome_digest_sha256": { "$ref": "#/$defs/digest" }
+        }
+      },
+      "else": {
+        "properties": {
+          "authority_outcome_digest_sha256": { "type": "null" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nonce": {
+      "type": "string",
+      "minLength": 43,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "action": {
+      "enum": [
+        "issue", "renew", "revoke", "certificate-status",
+        "operation-status", "reconcile-unknown"
+      ]
+    },
+    "nullable_id": {
+      "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+    },
+    "nullable_digest": {
+      "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }]
+    },
+    "nullable_integer": {
+      "oneOf": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "null" }
+      ]
+    }
+  }
+}
