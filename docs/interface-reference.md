@@ -1,27 +1,6 @@
-# crowsi-control-contracts
+# crowsi-control-contracts interface reference
 
-Exchange control requests, decisions and execution evidence through a shared, strict contract.
-
-## What you can do
-
-- Use consistent typed control envelopes.
-- Reject unsupported request shapes before policy evaluation.
-
-## Current scope
-
-These are contracts; authorization decisions and execution are supplied by their respective implementations.
-
-Package distribution is not activated by this documentation. Use the checked-in source and the declared dependency versions; published availability must be verified separately.
-
-## Getting started
-
-Install Rust 1.97 or newer and make the declared dependencies available. Use the configured private registry when a dependency is not distributed publicly. Run from this repository:
-
-```sh
-cargo test --locked
-```
-
-## Examples and interface details
+Use the [usage guide](getting-started.md) for the first steps. This reference preserves the current interface details and operational limits. Run command examples from the repository root, after preparing the exact declared dependencies and registered configuration.
 
 ## Certificate V2 contracts
 
@@ -67,11 +46,3 @@ Non-secret command, execution-lease, and receipt examples are in `fixtures/`;
 their detached signatures are structural placeholders and are not
 production-authentic. `cargo run --offline --example render_v2_fixtures`
 regenerates equivalent sample output without contacting a provider.
-
-## Documentation and source
-
-[Interface reference](docs/interface-reference.md)
-
-[Usage guide](docs/getting-started.md)
-
-[Examples](examples) · [Schemas](schemas) · [Implementation and public interfaces](src) · [Verification cases](tests) · [Contributing](CONTRIBUTING.md) · [Security reporting](SECURITY.md) · [License](LICENSE) · [Attribution notices](NOTICE)
